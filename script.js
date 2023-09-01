@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const players = ['South', 'West', 'North', 'East'];
     let currentPlayerIndex = 0;
-    let playerSuits = {}; // Change let to const
+    const playerSuits = {};
 
     // Enable starting input without clicking
     suitsInput.focus();
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentPlayerIndex < players.length) {
                 suitsInput.value = ''; // Clear input
                 suitsInput.placeholder = `Enter suits for ${players[currentPlayerIndex]}`;
+                suitsInput.focus(); // Re-focus on the input
             } else {
                 suitsInput.style.display = 'none'; // Hide input
                 calculateButton.style.display = 'none'; // Hide button
@@ -56,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.style.display = 'none'; // Hide reset button
         resultsDiv.innerHTML = ''; // Clear results
         currentPlayerIndex = 0; // Reset player index
-        playerSuits = {}; // Reset player suits
         suitsInput.focus(); // Re-focus input after reset
     });
 
