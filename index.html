@@ -3,15 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Rockwell&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Card Distribution</title>
+    <title>Pidro Suite Counter</title>
 </head>
 <body>
     <div class="container">
-        <h1>Card Distribution</h1>
-        <input type="number" id="suitsInput" min="0" max="9" placeholder="Enter suits for South">
-        <button id="calculateButton">Calculate</button>
-        <div id="results"></div>
+        <h1>Pidro Suite Counter</h1>
+        <p class="instructions">
+            Yo, check this out! The Pidro Suite Counter is your ace tool for dealing out suits in the Pidro card game. 
+            No sweat – just punch in the number of suits each player needs and let the counter handle the rest. 
+            
+        </p>
+        <div class="input-container">
+            <input id="suitsInput" type="number" placeholder="Enter suits for South" autofocus>
+            <button id="calculateButton">Deal 'em</button>
+            <button id="resetButton">Reset</button>
+        </div>
+        <div class="table-container" id="results"></div>
     </div>
     <script src="script.js"></script>
 </body>

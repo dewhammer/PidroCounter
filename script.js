@@ -1,11 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const suitsInput = document.getElementById('suitsInput');
     const calculateButton = document.getElementById('calculateButton');
+    const resetButton = document.getElementById('resetButton');
     const resultsDiv = document.getElementById('results');
 
     const players = ['South', 'West', 'North', 'East'];
     let currentPlayerIndex = 0;
-    const playerSuits = {};
+    let playerSuits = {}; // Change let to const
+
+    // Enable starting input without clicking
+    suitsInput.focus();
 
     calculateButton.addEventListener('click', () => {
         const suits = parseInt(suitsInput.value);
@@ -21,17 +25,45 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 suitsInput.style.display = 'none'; // Hide input
                 calculateButton.style.display = 'none'; // Hide button
+                resetButton.style.display = 'block'; // Show reset button
                 calculateAndDisplayResults();
             }
         } else {
-            alert(`Invalid input. Please enter a number between 0 and 9.`);
+            const funnyMessages = [
+                "Did you drop cards on the keyboard? Try again!",
+                "Invalid input! Maybe you're playing Uno instead?",
+                "Were you aiming for a poker face? Enter a valid number!",
+                "Did you use a joker card? Please enter a real number!"
+            ];
+            const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            alert(randomMessage);
         }
+    });
+
+    // Allow Enter key to submit input
+    suitsInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission
+            calculateButton.click();
+        }
+    });
+
+    resetButton.addEventListener('click', () => {
+        suitsInput.value = ''; // Clear input
+        suitsInput.placeholder = `Enter suits for ${players[0]}`;
+        suitsInput.style.display = 'block'; // Show input
+        calculateButton.style.display = 'block'; // Show button
+        resetButton.style.display = 'none'; // Hide reset button
+        resultsDiv.innerHTML = ''; // Clear results
+        currentPlayerIndex = 0; // Reset player index
+        playerSuits = {}; // Reset player suits
+        suitsInput.focus(); // Re-focus input after reset
     });
 
     function calculateAndDisplayResults() {
         resultsDiv.innerHTML = ''; // Clear previous results
 
-        let totalCards = 14;
+        let totalSuits = 14;
         let round = 1;
 
         const table = document.createElement('table');
@@ -42,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <th>West</th>
                 <th>North</th>
                 <th>East</th>
-                <th>Total Suit Remaining</th>
+                <th>Total Suits Remaining</th>
             </tr>
         `;
 
-        while (totalCards > 0 && Object.values(playerSuits).some(suits => suits > 0)) {
+        while (totalSuits > 0 && Object.values(playerSuits).some(suits => suits > 0)) {
             let totalSuitsThisRound = 0;
 
             for (const player in playerSuits) {
@@ -63,21 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${playerSuits['West']}</td>
                 <td>${playerSuits['North']}</td>
                 <td>${playerSuits['East']}</td>
-                <td>${totalCards - totalSuitsThisRound}</td>
-            `;
+                <td>${totalSuits - totalSuitsThisRound} suit${totalSuits - totalSuitsThisRound !== 1 ? 's' : ''} remaining</td>`;
             table.appendChild(row);
 
-            totalCards -= totalSuitsThisRound;
+            totalSuits -= totalSuitsThisRound;
             round++;
         }
 
-        if (totalCards !== 0) {
+        if (totalSuits > 0) {
             const errorRow = document.createElement('tr');
-            errorRow.innerHTML = `<td colspan="6">Error: ${totalCards} cards left!</td>`;
+            errorRow.innerHTML = `<td colspan="6">${totalSuits} suit${totalSuits !== 1 ? 's' : ''} left to distribute!</td>`;
             table.appendChild(errorRow);
         } else {
             const successRow = document.createElement('tr');
-            successRow.innerHTML = `<td colspan="6">All cards have been accounted for!</td>`;
+            successRow.innerHTML = `<td colspan="6">All suits have been accounted for!</td>`;
             table.appendChild(successRow);
         }
 
